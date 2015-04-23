@@ -1,12 +1,17 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
-from main.views import StatisticsView
+from django.views.generic import TemplateView
+from main.views import spam, total, reverts, complaints
 
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
-                       url(r'^$', StatisticsView.as_view(), name='main'),
+                       url('^spam/?$', spam, name='spam'),
+                       url('^total/?$', total, name='total'),
+                       url('^reverts/?$', reverts, name='reverts'),
+                       url('^complaints/?$', complaints, name='complaints'),
+                       url(r'^$', TemplateView.as_view(template_name='statistics.html')),
                        url(r'^admin/', include(admin.site.urls)),
 )
