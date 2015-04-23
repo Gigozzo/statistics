@@ -79,4 +79,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
+
+
+# PROJECT_ROOT       = '/home/gregory/work/statistics'
+PROJECT_ROOT       = '/home/gregory/work/statistics'
+STATIC_ROOT        = os.path.join(PROJECT_ROOT, 'sitestatic')
+# STATIC_ROOT        = os.path.join(PROJECT_ROOT, 'static')
+
+STATICFILES_DIRS = ("/home/gregory/work/statistics/main/static")
+
+# STATIC_URL = 'http://127.0.0.1:8000/static/'
 STATIC_URL = '/static/'
