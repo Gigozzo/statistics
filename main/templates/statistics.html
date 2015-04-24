@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 	<meta charset="utf-8"/>
-	<title>Planets</title>
+	<title>Statistics</title>
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 	<!--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css" rel="stylesheet">-->
 	<!-- Latest compiled and minified CSS -->
@@ -20,9 +20,8 @@
 
 	<!-- Highcharts-->
 	<script src="http://code.highcharts.com/stock/highstock.js"></script>
-	<script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
-
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+    <script src="http://code.highcharts.com/stock/highcharts-more.js"></script>
+    <script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
 
 	<!-- Latest compiled and minified JavaScript -->
 	<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.7.0/bootstrap-table.min.js"></script>-->
@@ -49,7 +48,7 @@
 <div class="navbar navbar-inverse navbar-fixed-top">
 	<div class="navbar-header">
 		<div class="container">
-			<a class="navbar-brand" href="#">{% static 'main/main.js' %}</a>
+			<a class="navbar-brand" href="#">Statistics beta</a>
 		</div>
 	</div>
 
@@ -59,6 +58,8 @@
 	<!--{% block highchart %}Empty page{% endblock %}-->
 
 <div id="container_1" style="height: 400px; min-width: 310px"></div>
+<div id="container_2" style="height: 400px; min-width: 310px"></div>
+<div id="container_3" style="height: 400px; min-width: 310px"></div>
 
 </div>
 
@@ -70,7 +71,7 @@ $(function () {
 console.log('WORKS');
     var seriesOptions = [],
         seriesCounter = 0,
-        names = ['spam', 'total', 'reverts'],
+        names = ['spam', 'total'],
         // create the chart when all data is loaded
         createChart = function () {
 
@@ -108,6 +109,139 @@ console.log('WORKS');
             });
         };
 console.log( $('#container_1'));
+console.log('<<<');
+    $.each(names, function (i, name) {
+
+        $.getJSON('http://127.0.0.1:8000/' + name.toLowerCase(),    function (data) {
+
+            seriesOptions[i] = {
+                name: name,
+                //data: moment(data).format('X')
+                data: data
+            };
+
+            // As we're loading the data asynchronously, we don't know what order it will arrive. So
+            // we keep a counter and create the chart when all the data is loaded.
+            seriesCounter += 1;
+
+            if (seriesCounter === names.length) {
+                createChart();
+            }
+        });
+    });
+});
+</script>
+
+<script type="text/javascript">
+$(function () {
+console.log('WORKS');
+    var seriesOptions = [],
+        seriesCounter = 0,
+        names = ['reverts', 'complaints'],
+        // create the chart when all data is loaded
+        createChart = function () {
+
+            $('#container_2').highcharts('StockChart', {
+
+                rangeSelector: {
+                    selected: 4
+                },
+
+                yAxis: {
+                    labels: {
+                        formatter: function () {
+                            return (this.value > 0 ? ' + ' : '') + this.value + '%';
+                        }
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 2,
+                        color: 'silver'
+                    }]
+                },
+
+                plotOptions: {
+                    series: {
+                        compare: 'percent'
+                    }
+                },
+
+                tooltip: {
+                    pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
+                    valueDecimals: 2
+                },
+
+                series: seriesOptions
+            });
+        };
+console.log( $('#container_2'));
+console.log('<<<');
+    $.each(names, function (i, name) {
+
+        $.getJSON('http://127.0.0.1:8000/' + name.toLowerCase(),    function (data) {
+
+            seriesOptions[i] = {
+                name: name,
+                //data: moment(data).format('X')
+                data: data
+            };
+
+            // As we're loading the data asynchronously, we don't know what order it will arrive. So
+            // we keep a counter and create the chart when all the data is loaded.
+            seriesCounter += 1;
+
+            if (seriesCounter === names.length) {
+                createChart();
+            }
+        });
+    });
+});
+</script>
+
+<script type="text/javascript">
+$(function () {
+console.log('WORKS');
+    var seriesOptions = [],
+        seriesCounter = 0,
+        names = ['reverts', 'complaints'],
+        // create the chart when all data is loaded
+        createChart = function () {
+
+            $('#container_3').highcharts('StockChart', {
+
+                rangeSelector: {
+                    allButtonsEnabled: true,
+                    selected: 2
+                },
+
+                yAxis: {
+                    labels: {
+                        formatter: function () {
+                            return (this.value > 0 ? ' + ' : '') + this.value + '%';
+                        }
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 2,
+                        color: 'silver'
+                    }]
+                },
+
+                plotOptions: {
+                    series: {
+                        compare: 'percent'
+                    }
+                },
+
+                tooltip: {
+                    pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
+                    valueDecimals: 2
+                },
+
+                series: seriesOptions
+            });
+        };
+console.log( $('#container_3'));
 console.log('<<<');
     $.each(names, function (i, name) {
 
